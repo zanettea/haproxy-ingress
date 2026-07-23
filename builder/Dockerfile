@@ -15,14 +15,16 @@
 FROM golang:1.19.12-alpine AS builder
 
 ARG GIT_TAG
+ARG GIT_COMMIT
+ARG GIT_REPO
 WORKDIR /src
 RUN apk --no-cache add git
 
 COPY . .
 
 RUN GIT_TAG=${GIT_TAG:-latest}\
- && GIT_COMMIT=git-$(git rev-parse --short HEAD)\
- && GIT_REPO=$(git config --get remote.origin.url)\
+ && GIT_COMMIT=${GIT_COMMIT:-git-$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")}\
+ && GIT_REPO=${GIT_REPO:-$(git config --get remote.origin.url 2>/dev/null || echo "unknown")}\
  && VERSION_PKG=github.com/zanettea/haproxy-ingress/pkg/version\
  && CGO_ENABLED=0 go build\
     -ldflags "-s -w -X ${VERSION_PKG}.RELEASE=${GIT_TAG} -X ${VERSION_PKG}.COMMIT=${GIT_COMMIT} -X ${VERSION_PKG}.REPO=${GIT_REPO}"\
