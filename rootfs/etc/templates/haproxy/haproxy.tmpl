@@ -1287,6 +1287,7 @@ frontend {{ $frontend.Name }}
         {{- if $frontend.AcceptProxy }} accept-proxy{{ end }}
         {{- "" }} ssl alpn {{ $global.SSL.ALPN }}
         {{- "" }} crt-list {{ $frontend.CrtListFile }}
+        {{- if $global.SSL.StrictSNI }} strict-sni{{ end }}
         {{- "" }} ca-ignore-err all crt-ignore-err all
 {{- end }}
 

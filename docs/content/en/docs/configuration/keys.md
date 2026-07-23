@@ -469,6 +469,7 @@ The table below describes all supported configuration keys.
 | [`ssl-passthrough-http-port`](#ssl-passthrough)      | backend port                            | Host    |                    |
 | [`ssl-redirect`](#ssl-redirect)                      | [true\|false]                           | Path    | `true`             |
 | [`ssl-redirect-code`](#ssl-redirect)                 | http status code                        | Global  | `302`              |
+| [`ssl-strict-sni`](#ssl-strict-sni)                  | [true\|false]                           | Global  | `false`            |
 | [`stats-auth`](#stats)                               | user:passwd                             | Global  | no auth            |
 | [`stats-port`](#stats)                               | port number                             | Global  | `1936`             |
 | [`stats-proxy-protocol`](#stats)                     | [true\|false]                           | Global  | `false`            |
@@ -2555,6 +2556,26 @@ New supported options since v0.9 for `ssl-options` and `ssl-options-backend`:
 See also:
 
 * https://docs.haproxy.org/2.4/configuration.html#5.1-crt-list
+
+---
+
+## SSL strict SNI
+
+| Configuration key | Scope    | Default | Since |
+|-------------------|----------|---------|-------|
+| `ssl-strict-sni`  | `Global` | `false` |       |
+
+When `true`, adds the `strict-sni` option to the HTTPS frontend `bind` line, so
+HAProxy refuses the TLS handshake if the client does not provide an SNI, or provides
+one that does not match any configured certificate, instead of serving the default
+certificate.
+
+`strict-sni` is a `bind` line only keyword and cannot be configured via `ssl-options`
+(`ssl-default-bind-options`), which is why it has its own configuration key.
+
+See also:
+
+* https://docs.haproxy.org/2.4/configuration.html#5.1-strict-sni
 
 ---
 

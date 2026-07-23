@@ -117,6 +117,7 @@ const (
 	GlobalSSLModeAsync                 = "ssl-mode-async"
 	GlobalSSLOptions                   = "ssl-options"
 	GlobalSSLRedirectCode              = "ssl-redirect-code"
+	GlobalSSLStrictSNI                 = "ssl-strict-sni"
 	GlobalStatsAuth                    = "stats-auth"
 	GlobalStatsPort                    = "stats-port"
 	GlobalStatsProxyProtocol           = "stats-proxy-protocol"

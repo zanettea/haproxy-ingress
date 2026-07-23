@@ -149,6 +149,7 @@ type SSLConfig struct {
 	ModeAsync           bool
 	Options             string
 	RedirectCode        int
+	StrictSNI           bool
 }
 
 // DHParamConfig ...

@@ -1176,6 +1176,7 @@ backend d1_app_8080
 func TestInstanceGlobalBind(t *testing.T) {
 	testCases := []struct {
 		bind          hatypes.GlobalBindConfig
+		strictSNI     bool
 		expectedHTTP  string
 		expectedHTTPS string
 	}{
@@ -1200,6 +1201,16 @@ func TestInstanceGlobalBind(t *testing.T) {
 			expectedHTTP:  "bind 127.0.0.1:80",
 			expectedHTTPS: "bind 127.0.0.1:443 ssl alpn h2,http/1.1 crt-list /etc/haproxy/maps/_front_bind_crt.list ca-ignore-err all crt-ignore-err all",
 		},
+		// 3
+		{
+			bind: hatypes.GlobalBindConfig{
+				HTTPBind:  ":80",
+				HTTPSBind: ":443",
+			},
+			strictSNI:     true,
+			expectedHTTP:  "bind :80",
+			expectedHTTPS: "bind :443 ssl alpn h2,http/1.1 crt-list /etc/haproxy/maps/_front_bind_crt.list strict-sni ca-ignore-err all crt-ignore-err all",
+		},
 	}
 	for _, test := range testCases {
 		c := setup(t)
@@ -1210,6 +1221,7 @@ func TestInstanceGlobalBind(t *testing.T) {
 		h.AddPath(b, "/", hatypes.MatchBegin)
 
 		c.config.Global().Bind = test.bind
+		c.config.Global().SSL.StrictSNI = test.strictSNI
 		if test.expectedHTTP != "" {
 			test.expectedHTTP = "\n    " + test.expectedHTTP
 		}
